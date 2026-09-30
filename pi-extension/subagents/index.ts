@@ -229,6 +229,14 @@ function getToolExtensionPath(tool: string): string | undefined {
   // was disabled/removed but a project-local extension re-registered it).
   const builtin = map[tool];
   if (builtin && existsSync(builtin)) return builtin;
+  // pi-web-access registers these names. One file backs all of them.
+  const piWeb = join(homedir(), ".pi/agent/npm/node_modules/pi-web-access/dist/index.js");
+  if (
+    (tool === "web_search" || tool === "fetch_content" || tool === "get_search_content" || tool === "source_check") &&
+    existsSync(piWeb)
+  ) {
+    return piWeb;
+  }
   return EXTRA_TOOL_EXTENSIONS.get(tool);
 }
 
